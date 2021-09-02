@@ -3,39 +3,96 @@ import React, { useState } from  'react';
     
 const UserForm = (props) => {
     const [firstName, setFirstName] = useState("");
+    const [firstError, setFirstError] = useState("");
+
     const [lastName, setLastName] = useState("");
+    const [lastError, setLastError] = useState("");
+
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");  
-    const [confirm, setConfirm] = useState("");  
+    const [emailError, setEmailError] = useState("");
+
+    const [password, setPassword] = useState(""); 
+    const [passwordError, setPasswordError] = useState("");  
+
+    const [confirm, setConfirm] = useState("");
+    const [confirmError, setConfirmError] = useState("");  
+
 
     const createUser = (e) => {
-        e.preventDefault();
-        const newUser = { firstName, lastName, email, password, confirm };
-        console.log("Welcome", newUser);
+        console.log(e.target.value)
+        if(e.target.name === "firstname") {
+            setFirstName(e.target.value);
+            if(e.target.value.length < 2){
+                setFirstError("First name must be longer than 2 characters.");
+            }
+        }else if(e.target.name === "lastname") {
+            setLastName(e.target.value);
+            if(e.target.value.length < 2){
+                setLastError("Last name must be longer than 2 characters.");
+            }
+        }else if(e.target.name === "email") {
+            setEmail(e.target.value);
+            if(e.target.value.length < 2){
+                setEmailError("Email must be longer than 2 characters.");
+            }
+        }else if(e.target.name === "password") {
+            setPassword(e.target.value);
+            if(e.target.value.length < 7){
+                setPasswordError("Password must be at least 8 characters.");
+            }
+        }
+        else if(e.target.name === "confirm") {
+            setConfirm(e.target.value);
+            if(e.target.value !== password){
+                setConfirmError("Password must match.");
+            }
+        }
+        
     };
+
     
     return(
         <>
-        <form onSubmit={ createUser }>
+        <form onChange={ (e) => e.preventDefault() }>
             <div>
                 <label>First Name: </label> 
-                <input type="text" onChange={ (e) => setFirstName(e.target.value) } />
+                <input name="firstname" type="text" onChange={ createUser } />
+                {
+                    firstError ?
+                    <p style={{color: "red"}}>{ firstError }</p> : ''
+                }
             </div>
             <div>
                 <label>Last Name: </label> 
-                <input type="text" onChange={ (e) => setLastName(e.target.value) } />
+                <input name="lastname" type="text" onChange={ createUser } />
+                {
+                    lastError ?
+                    <p style={{color: "red"}}>{ lastError }</p> : ''
+                }
             </div>
             <div>
                 <label>Email: </label> 
-                <input type="text" onChange={ (e) => setEmail(e.target.value) } />
+                <input name="email" type="text" onChange={ createUser } />
+                {
+                    emailError ?
+                    <p style={{color: "red"}}>{ emailError }</p> : ''
+                }
             </div>
             <div>
                 <label>Password: </label>
-                <input type="password" onChange={ (e) => setPassword(e.target.value) } />
+                <input name="password" type="password" onChange={ createUser } />
+                {
+                    passwordError ?
+                    <p style={{color: "red"}}>{ passwordError }</p> : ''
+                }
             </div>
             <div>
+                {
+                    confirmError ?
+                    <p style={{color: "red"}}>{ confirmError }</p> : ''
+                }
                 <label>Confirm Password: </label>
-                <input type="password" onChange={ (e) => setConfirm(e.target.value) } />
+                <input name="confirm" type="password" onChange={ createUser } />
             </div>
         </form>
         <p>Your form data</p>
